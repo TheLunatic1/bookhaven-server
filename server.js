@@ -2,12 +2,14 @@ require("dotenv").config();               // .env
 const express = require("express");       // Express
 const cors = require("cors");             // CORS
 const mongoose = require("mongoose");     // Mongoose
+const bookRoutes = require("./routes/bookRoutes"); // Book routes
 
 const app = express();                    
 
 // MIDDLEWARE
 app.use(cors());                          
-app.use(express.json());                  
+app.use(express.json());  
+app.use("/api/books", bookRoutes);                
 
 // HEALTH CHECK ROUTE
 app.get("/api/health", (req, res) => {
