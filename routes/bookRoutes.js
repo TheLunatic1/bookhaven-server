@@ -49,6 +49,21 @@ router.post("/", async (req, res) => {
 });
 
 
+router.get("/my", async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ msg: "Email is required" });
+    }
+
+    const userBooks = await Book.find({ userEmail: email }).sort({ createdAt: -1 });
+    res.json(userBooks);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
 
 module.exports = router;
 
