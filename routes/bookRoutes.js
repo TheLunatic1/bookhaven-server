@@ -156,6 +156,22 @@ router.post("/:id/comment", async (req, res) => {
   }
 });
 
+
+//debug book details -- book not found case
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ msg: "Book not found" });
+    }
+    res.json(book);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 module.exports = router;
 
 //porweshell test
