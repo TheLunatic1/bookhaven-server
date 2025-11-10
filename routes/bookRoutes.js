@@ -95,6 +95,31 @@ router.put("/:id", async (req, res) => {
 });
 
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userEmail } = req.body;
+
+    if (!userEmail) {
+      return res.status(400).json({ msg: "userEmail is required" });
+    }
+
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ msg: "Book not found" });
+    }
+
+    if (book.userEmail !== userEmail) {
+      return res.status(403).json({ msg: "Not authorized to delete this book" });
+    }
+
+    await Book.findByIdAndDelete(id);
+    res.json({ msg: "Book deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
 
 module.exports = router;
 
@@ -113,7 +138,7 @@ module.exports = router;
 
 
 
-
+// bash test
 // curl -X PUT http://localhost:5000/api/books/6910e8a279692f7f509975c8 \
 //   -H "Content-Type: application/json" \
 //   -d '{
@@ -121,4 +146,11 @@ module.exports = router;
 //     "title": "The Hobbit (Updated)",
 //     "rating": 4,
 //     "summary": "An epic adventure with dragons and treasure."
+//   }'
+
+
+// curl -X DELETE http://localhost:5000/api/books/6910e8a279692f7f509975c8 \
+//   -H "Content-Type: application/json" \
+//   -d '{
+//     "userEmail": "test@example.com"
 //   }'
