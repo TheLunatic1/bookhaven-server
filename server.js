@@ -9,7 +9,15 @@ const app = express();
 // MIDDLEWARE
 app.use(cors());                          
 app.use(express.json());  
-app.use("/api/books", bookRoutes);                
+app.use("/api/books", bookRoutes);   
+
+
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Book Haven API - Welcome! Use /api/books for endpoints." });
+});
+
+
 
 // HEALTH CHECK ROUTE
 app.get("/api/health", (req, res) => {
@@ -19,7 +27,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// ONNECT MONGODB
+// CONNECT MONGODB
 mongoose
   .connect(process.env.MONGO_URI)         
   .then(() => console.log("MongoDB connected"))
@@ -30,3 +38,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+module.exports = app;
