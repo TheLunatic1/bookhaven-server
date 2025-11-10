@@ -65,9 +65,40 @@ router.get("/my", async (req, res) => {
   }
 });
 
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userEmail, ...updateData } = req.body;
+
+    if (!userEmail) {
+      return res.status(400).json({ msg: "userEmail is required" });
+    }
+
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ msg: "Book not found" });
+    }
+
+    if (book.userEmail !== userEmail) {
+      return res.status(403).json({ msg: "Not authorized to update this book" });
+    }
+
+    Object.assign(book, updateData);
+    const updatedBook = await book.save();
+
+    res.json(updatedBook);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+
+
 module.exports = router;
 
-
+//porweshell test
 // curl -Method POST http://localhost:5000/api/books `
 //   -Headers @{"Content-Type"="application/json"} `
 //   -Body '{
@@ -78,4 +109,16 @@ module.exports = router;
 //     "summary": "A hobbit goes on an adventure.",
 //     "coverImage": "https://images.example.com/hobbit.jpg",
 //     "userEmail": "test@example.com"
+//   }'
+
+
+
+
+// curl -X PUT http://localhost:5000/api/books/6910e8a279692f7f509975c8 \
+//   -H "Content-Type: application/json" \
+//   -d '{
+//     "userEmail": "test@example.com",
+//     "title": "The Hobbit (Updated)",
+//     "rating": 4,
+//     "summary": "An epic adventure with dragons and treasure."
 //   }'
