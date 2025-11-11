@@ -7,7 +7,18 @@ const bookRoutes = require("./routes/bookRoutes"); // Book routes
 const app = express();                    
 
 // MIDDLEWARE
-app.use(cors());                          
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://https://bookhaven-client.web.app/"
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Add this line for pre-flight OPTIONS
+app.options('*', cors());                         
 app.use(express.json());  
 app.use("/api/books", bookRoutes);   
 
@@ -33,10 +44,5 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// START SERVER
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
 
 module.exports = app;
