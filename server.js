@@ -17,8 +17,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Add this line for pre-flight OPTIONS
-app.options('*', cors());                         
+                       
 app.use(express.json());  
 app.use("/api/books", bookRoutes);   
 
