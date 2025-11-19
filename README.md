@@ -6,6 +6,7 @@
 🔥 **Live API Base URL**: `https://bookhaven-server.vercel.app/api`
 
 🌐 **Client Live Demo**: [https://bookhaven-client.web.app](https://bookhaven-client.web.app)
+![Book Haven API Preview](https://i.imgur.com/phdllba.png) 
 
 ### ✨ Features
 - Full CRUD operations for books (Create, Read, Update, Delete)
